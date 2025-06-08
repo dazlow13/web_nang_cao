@@ -9,6 +9,7 @@ function lop_get_all(){
     disconnect($connect);
     return $data;  
 }
+
 function render_options_lop($selected = '') {
     $lops = lop_get_all();
     $options = '';
@@ -19,31 +20,40 @@ function render_options_lop($selected = '') {
     return $options;
 }
 
-switch ($_GET['action'] ?? '') {
-    case '':
-        $sql = "SELECT * FROM lop";
-        $result = mysqli_query($connect, $sql);
-        break;
-    case 'store':
-        $sql = "INSERT INTO lop (ten) VALUES ('" . $_POST['ten'] . "')";
-        mysqli_query($connect, $sql);
-        break;
-    case 'edit':
-        $sql = "SELECT * FROM lop WHERE ma = '$ma'";
-        $result = mysqli_query($connect, $sql );
-        $each = mysqli_fetch_array($result);
-        break;
-    case 'update':
-        $ma = $_POST['ma'] ?? '';
-        $ten = $_POST['ten'] ?? '';
-        $sql = "UPDATE lop SET ten = '$ten' WHERE ma = '$ma'";
-        mysqli_query($connect, $sql);
-        break;
-    case 'delete':
-        $ma = $_GET['ma'] ?? '';
-        $sql = "DELETE FROM lop WHERE ma = '$ma'";
-        mysqli_query($connect, $sql);
-        break;
+function lop_index(){
+    $connect = connect();
+    $sql = "SELECT * FROM lop";
+    $result = mysqli_query($connect, $sql);
+    disconnect($connect);
+    return $result;
 }
 
+function lop_store($ten){
+    $connect = connect();
+    $sql = "INSERT INTO lop (ten) VALUES ('$ten')";
+    mysqli_query($connect, $sql);
+    disconnect($connect);
+}
 
+function lop_edit($ma) {
+    $connect = connect();
+     $sql = "SELECT * FROM lop WHERE ma = '$ma'";
+        $result = mysqli_query($connect, $sql );
+        $each = mysqli_fetch_array($result);
+    disconnect($connect);
+    return $each;
+}
+
+function lop_update($ma, $ten) {
+    $connect = connect();
+    $sql = "UPDATE lop SET ten = '$ten' WHERE ma = '$ma'";
+    mysqli_query($connect, $sql);
+    disconnect($connect);
+}
+
+function lop_delete($ma) {
+    $connect = connect();
+    $sql = "DELETE FROM lop WHERE ma = '$ma'";
+    mysqli_query($connect, $sql);
+    disconnect($connect);
+}
